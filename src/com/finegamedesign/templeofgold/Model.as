@@ -76,6 +76,7 @@ package com.finegamedesign.templeofgold
             if (null == levelScores[level]) {
                 levelScores[level] = 0;
             }
+            levelScore = 0;
             point = 0;
             map = parse(levelDiagrams[level - 1]);
             for (var r:int = 0; r < map.length; r++) {
@@ -111,7 +112,21 @@ package com.finegamedesign.templeofgold
             else if ("DOWN" == direction) {
                 playerRow++;
             }
-            return false;
+            var key:String = map[playerRow][playerColumn];
+            if ("Gold" == items[key]) {
+                map[playerRow][playerColumn] = ".";
+                point = 1;
+                levelScore++;
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        internal function at(c:int, r:int):String
+        {
+            return (r * 100 + c).toString();
         }
 
         /**
