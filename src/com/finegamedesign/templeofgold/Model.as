@@ -9,12 +9,38 @@ package com.finegamedesign.templeofgold
         internal static var levelScores:Array = [];
         internal static var score:int = 0;
         internal static var seconds:int = 60;
-
+        internal static var items:Object = {
+            "@":	"Player",
+            " ":    "Wall",
+            // A-Z	key
+            // a-z	corresponding lock
+            ".":	"Floor",
+            "$":	"Gold",
+            "%":	"Stairs"
+        };
+        /*
+            @	player
+            " "	(space) wall
+            A-Z	key
+            a-z	corresponding lock
+            .	Floor
+            $	gold
+            %	stairs down
+         */
         [Embed(source="levels.txt", mimeType="application/octet-stream")]
-        internal static var levelDiagramsClass:Class
-        internal static var levelDiagrams:Array = parse(String(new levelDiagramsClass()));
+        private static var levelDiagramsClass:Class
+        private static var levelDiagrams:Array = paragraphs(String(new levelDiagramsClass()));
 
-        internal static function parse(levelDiagramsText:String):Array
+        private static function parse(map:String):Array
+        {
+             var rows:Array = map.split("\n");
+             for (var r:int = 0; r < rows.length; r++) {
+                 rows[r] = rows[r].split("");
+             }
+             return rows;
+        }
+
+        internal static function paragraphs(levelDiagramsText:String):Array
         {
             return levelDiagramsText.split("\r\n").join("\n").split("\r").join("\n").split("\n\n");
         }
@@ -32,6 +58,7 @@ package com.finegamedesign.templeofgold
         internal var highScore:int;
         internal var level:int;
         internal var levelScore:int;
+        internal var map:Array;
         internal var point:int;
 
         public function Model()
@@ -48,6 +75,7 @@ package com.finegamedesign.templeofgold
                 levelScores[level] = 0;
             }
             point = 0;
+            map = parse(levelDiagrams[level - 1]);
         }
 
         internal function clear():void

@@ -9,13 +9,14 @@ package com.finegamedesign.templeofgold
 
     public class View
     {
+        private static var tile:Tile = new Tile();
+
         private static var itemClasses:Object = {
-            landfill:   ItemLandfill,
-            recycle:   ItemRecycle,
-            AluminumCan:   ItemAluminumCan,
-            PlasticBottle:   ItemPlasticBottle,
-            Styrofoam:   ItemStyrofoam,
-            PlasticBag:   ItemPlasticBag
+            "Player":   Player,
+            "Wall":   Wall,
+            "Floor":   Floor,
+            "Gold":   Gold,
+            "Stairs":   Stairs
         }
 
         internal var main:Main;
@@ -23,7 +24,6 @@ package com.finegamedesign.templeofgold
         private var countdown:Countdown;
         private var garbage:Array;
         private var pointClip:PointClip;
-        private var queue:Array;
 
         public function View()
         {
@@ -35,26 +35,55 @@ package com.finegamedesign.templeofgold
             this.model = model;
             this.main = main;
             countdown.setup(Model.seconds, main.time_txt);
+            populateMap(model.map);
         }
 
-        private function populateQueue(queueModel:Array):void
+        private function populateMap(map:Array):void
         {
-            queue = [];
             garbage = [];
-            for (var i:int = queueModel.length - 1; 0 <= i; i--) {
-                var itemClass:Class = itemClasses[queueModel[i]];
-                var item:DisplayObjectContainer = new itemClass();
-                item.cacheAsBitmap = true;
-                queue.unshift(item);
+            var player:DisplayObject;
+            for (var r:int = 0; r < map.length; r++) {
+                for (var c:int = 0; c < map[r].length; c++) {
+                    var key:String = map[r][c];
+                    var name:String;
+                    var item:DisplayObject;
+                    if (key in Model.items) {
+                        name = Model.items[key];
+                        var itemClass:Class = itemClasses[name];
+                    }
+                    else {
+                        throw new Error("Unknown key " + key);
+                    }
+                    if ("Floor" != name) {
+                        item = place(new Floor, c, r, main.input.map);
+                    }
+                    item = place(new itemClass, c, r, main.input.map);
+                    if ("Player" == name) {
+                        player = item;
+                    }
+                }
                 garbage.unshift(item);
             }
+            main.input.map.x = -player.x;
+            main.input.map.y = -player.y;
+        }
+
+        private function place(item:DisplayObject, c:int, r:int, map:DisplayObjectContainer):DisplayObject
+        {
+            item.cacheAsBitmap = true;
+            item.x = c * tile.width;
+            item.y = r * tile.height;
+            map.addChild(item);
+            return item;
         }
 
         private function answer(name:String):void
         {
             countdown.start();
             var correct:Boolean = model.answer(name);
-            pointClip = point(main.input[name]);
+            if (correct) {
+                pointClip = point(main.input);
+            }
             main.answer(correct);
         }
 
