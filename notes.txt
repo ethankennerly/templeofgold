@@ -1,0 +1,79 @@
+TODO
+	Parse map into player, floor, walls, lock, key, gold, stairs.
+	Press arrow key to move.
+	Wall blocks movement.
+	Key opens corresponding lock.
+	Shuffle keys.
+	Gold.
+	Stairs score remaining time.
+	5 maps.
+	Balance lamp oil to moves.
+	Darkness occludes rest of the map.
+
+
+REFERENCE GAMES
+	Dungeon of Death (http://crpgaddict.blogspot.com/2013/02/game-86-dungeon-of-death-1979.html)
+	Legend of Zelda
+	Maze Temple (Newgrounds)
+	A Maze Me (https://play.google.com/store/apps/details?id=com.xquadro.android.amazeme)
+	Robot Wants Kitty
+	Scuba Bear
+	Castlevania
+	Metroid
+
+REFERENCE ART
+	Dungeon of Death (http://crpgaddict.blogspot.com/2013/02/game-86-dungeon-of-death-1979.html)
+	Legend of Zelda
+	Maze Temple (Newgrounds)
+	http://www.ebay.com/itm/Antique-Vtg-old-look-skeleton-key-lot-heart-bow-steampunk-charm-necklace-jewelry-/360719690381?pt=Architectural_Garden&hash=item53fc91aa8d
+
+
+Sat 05/24/2014 
+08:51
+
+Dungeon Doors
+
+Tiles.
+Arrow keys to move.
+Lamp radius flood fill.
+Limited oil.
+Radius diminishes.
+Remember icon on lock.
+See keys. 
+Recognize which key matches.
+Move key.
+Open lock.
+Proceed.
+Collect gold.
+Repeat.
+When lamp is extinguished game ends.
+Or when time up, game ends.
+Stairs to next level.
+Balance moves to best case with information available.
+Only carry one key at a time.
+Walk over key to pick it up.
+If carrying a key, swap.
+
+Legend:
+
+	@	player
+	" "	(space) wall
+	A-Z	key
+	a-z	corresponding lock
+	.	Floor
+	$	gold
+	%	stairs down
+
+Map:
+
+@...Bd.b.$.%
+....A .
+a     .
+..c...$ 
+$..
+...
+$..
+...
+C.D
+
+
