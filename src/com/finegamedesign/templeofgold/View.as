@@ -67,7 +67,6 @@ package com.finegamedesign.templeofgold
                         golds[model.at(c, r)] = item;
                     }
                 }
-                garbage.unshift(item);
             }
             updatePosition();
         }
@@ -78,6 +77,7 @@ package com.finegamedesign.templeofgold
             item.x = c * tile.width;
             item.y = r * tile.height;
             map.addChild(item);
+            garbage.unshift(item);
             return item;
         }
 

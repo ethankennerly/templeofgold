@@ -36,12 +36,13 @@ package com.finegamedesign.templeofgold
         private var loopChannel:SoundChannel;
 
         public var feedback:MovieClip;
+        public var fuel_txt:TextField;
+        public var head:DisplayObjectContainer;
+        public var input:MovieClip;
         public var levelScore_txt:TextField;
+        public var restartTrial_btn:SimpleButton;
         public var score_txt:TextField;
         public var time_txt:TextField;
-        public var restartTrial_btn:SimpleButton;
-        public var input:MovieClip;
-        public var head:DisplayObjectContainer;
 
         internal var keyMouse:KeyMouse;
         private var inTrial:Boolean;
@@ -115,6 +116,7 @@ package com.finegamedesign.templeofgold
             score_txt.text = Model.score.toString();
             if (model) {
                 levelScore_txt.text = model.levelScore.toString();
+                fuel_txt.text = model.fuel.toString();
             }
         }
 

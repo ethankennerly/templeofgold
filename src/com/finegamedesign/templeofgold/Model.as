@@ -55,13 +55,16 @@ package com.finegamedesign.templeofgold
             }
         }
 
+        internal var fuel:int;
         internal var highScore:int;
         internal var level:int;
         internal var levelScore:int;
         internal var map:Array;
+        internal var moved:Boolean;
         internal var point:int;
         internal var playerRow:int;
         internal var playerColumn:int;
+        internal var secondsRemaining:int;
 
         public function Model()
         {
@@ -78,6 +81,8 @@ package com.finegamedesign.templeofgold
             }
             levelScore = 0;
             point = 0;
+            moved = false;
+            fuel = 200;
             map = parse(levelDiagrams[level - 1]);
             for (var r:int = 0; r < map.length; r++) {
                 for (var c:int = 0; c < map[r].length; c++) {
@@ -95,33 +100,49 @@ package com.finegamedesign.templeofgold
 
         internal function update(secondsRemaining:int):int
         {
-            return win(secondsRemaining);
+            this.secondsRemaining = secondsRemaining;
+            return win();
         }
 
         internal function answer(direction:String):Boolean
         {
+            var nextColumn:int = playerColumn;
+            var nextRow:int = playerRow;
             if ("LEFT" == direction) {
-                playerColumn--;
+                nextColumn--;
             }
             else if ("RIGHT" == direction) {
-                playerColumn++;
+                nextColumn++;
             }
             else if ("UP" == direction) {
-                playerRow--;
+                nextRow--;
             }
             else if ("DOWN" == direction) {
-                playerRow++;
+                nextRow++;
             }
-            var key:String = map[playerRow][playerColumn];
-            if ("Gold" == items[key]) {
-                map[playerRow][playerColumn] = ".";
-                point = 1;
-                levelScore++;
-                return true;
-            }
-            else {
+            if (nextRow < 0 || map.length <= nextRow
+             || nextColumn < 0 || map[nextRow].length <= nextColumn) {
                 return false;
             }
+            var key:String = map[nextRow][nextColumn];
+            if ("Wall" == items[key]) {
+                return false;
+            }
+            playerRow = nextRow;
+            playerColumn = nextColumn;
+            moved = true;
+            fuel -= 10;
+            if ("Stairs" == items[key]) {
+                point = secondsRemaining + fuel;
+                levelScore += point;
+            }
+            else if ("Gold" == items[key]) {
+                map[playerRow][playerColumn] = ".";
+                point = 100;
+                levelScore += point;
+                return true;
+            }
+            return false;
         }
 
         internal function at(c:int, r:int):String
@@ -129,16 +150,24 @@ package com.finegamedesign.templeofgold
             return (r * 100 + c).toString();
         }
 
+        internal function on():String
+        {
+            return items[map[playerRow][playerColumn]];
+        }
+
         /**
          * @return  0 continue, 1: win, -1: lose.
          */
-        private function win(secondsRemaining:int):int
+        private function win():int
         {
-            updateScore();
             var winning:int = 0;
-            if (secondsRemaining <= 0) {
+            if (secondsRemaining <= 0 || fuel <= 0) {
                 winning = -1;
             }
+            else if ("Stairs" == on()) {
+                winning = 1;
+            }
+            updateScore();
             return winning;
         }
 
