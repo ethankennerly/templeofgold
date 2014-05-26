@@ -60,6 +60,8 @@ package com.finegamedesign.templeofgold
         internal var levelScore:int;
         internal var map:Array;
         internal var point:int;
+        internal var playerRow:int;
+        internal var playerColumn:int;
 
         public function Model()
         {
@@ -76,6 +78,14 @@ package com.finegamedesign.templeofgold
             }
             point = 0;
             map = parse(levelDiagrams[level - 1]);
+            for (var r:int = 0; r < map.length; r++) {
+                for (var c:int = 0; c < map[r].length; c++) {
+                    if ("Player" == items[map[r][c]]) {
+                        playerRow = r;
+                        playerColumn = c;
+                    }
+                }
+            }
         }
 
         internal function clear():void
@@ -89,6 +99,18 @@ package com.finegamedesign.templeofgold
 
         internal function answer(direction:String):Boolean
         {
+            if ("LEFT" == direction) {
+                playerColumn--;
+            }
+            else if ("RIGHT" == direction) {
+                playerColumn++;
+            }
+            else if ("UP" == direction) {
+                playerRow--;
+            }
+            else if ("DOWN" == direction) {
+                playerRow++;
+            }
             return false;
         }
 

@@ -20,6 +20,9 @@ package com.finegamedesign.templeofgold
         [Embed(source="../../../../sfx/chime.mp3")]
         private static var selectClass:Class;
         internal var select:Sound = new selectClass();
+        [Embed(source="../../../../sfx/oxygen.mp3")]
+        private static var stepClass:Class;
+        internal var step:Sound = new stepClass();
         [Embed(source="../../../../sfx/die.mp3")]
         private static var wrongClass:Class;
         internal var wrong:Sound = new wrongClass();
@@ -103,7 +106,7 @@ package com.finegamedesign.templeofgold
                 this.correct.play();
             }
             else {
-                this.wrong.play();
+                this.step.play();
             }
         }
 

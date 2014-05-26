@@ -23,6 +23,7 @@ package com.finegamedesign.templeofgold
         internal var model:Model;
         private var countdown:Countdown;
         private var garbage:Array;
+        private var player:DisplayObject;
         private var pointClip:PointClip;
 
         public function View()
@@ -41,7 +42,6 @@ package com.finegamedesign.templeofgold
         private function populateMap(map:Array):void
         {
             garbage = [];
-            var player:DisplayObject;
             for (var r:int = 0; r < map.length; r++) {
                 for (var c:int = 0; c < map[r].length; c++) {
                     var key:String = map[r][c];
@@ -64,8 +64,7 @@ package com.finegamedesign.templeofgold
                 }
                 garbage.unshift(item);
             }
-            main.input.map.x = -player.x;
-            main.input.map.y = -player.y;
+            updatePosition();
         }
 
         private function place(item:DisplayObject, c:int, r:int, map:DisplayObjectContainer):DisplayObject
@@ -113,8 +112,18 @@ package com.finegamedesign.templeofgold
             else if (main.keyMouse.justPressed("DOWN")) {
                 answer("DOWN");
             }
+            updatePosition();
             var winning:int = model.update(countdown.remaining);
             return winning;
+        }
+
+        private function updatePosition():void
+        {
+            main.input.map.addChild(player);
+            player.x = model.playerColumn * tile.width;
+            player.y = model.playerRow * tile.height;
+            main.input.map.x = -player.x;
+            main.input.map.y = -player.y;
         }
 
         private function remove(garbage:Array):void
