@@ -43,7 +43,6 @@ package com.finegamedesign.templeofgold
         internal var keyMouse:KeyMouse;
         private var inTrial:Boolean;
         private var level:int;
-        private var maxLevel:int;
         private var model:Model;
         private var view:View;
 
@@ -98,34 +97,22 @@ package com.finegamedesign.templeofgold
             view.populate(model, this);
         }
 
-        internal function answer(correct:Boolean, pointClip:PointClip):void
+        internal function answer(correct:Boolean):void
         {
-            input.answer.mouseChildren = false;
-            input.answer.mouseEnabled = false;
-            input.addChild(input.answer);
-            input.answer.x = pointClip.x;
-            input.answer.y = pointClip.y;
             if (correct) {
                 this.correct.play();
-                input.answer.gotoAndPlay("correct");
             }
             else {
                 this.wrong.play();
-                input.answer.gotoAndPlay("wrong");
             }
         }
 
         private function updateHudText():void
         {
-            // trace("updateHudText: ", score, highScore);
             score_txt.text = Model.score.toString();
             if (model) {
                 levelScore_txt.text = model.levelScore.toString();
             }
-            // score_txt.text = "12";
-            // highScore_txt.text = Model.highScore.toString();
-            // level_txt.text = level.toString();
-            // maxLevel_txt.text = maxLevel.toString();
         }
 
         private function update(event:Event):void
@@ -143,7 +130,6 @@ package com.finegamedesign.templeofgold
                 result(view.update());
             }
             else {
-                // view.update();
                 if ("next" == feedback.currentLabel) {
                     next();
                 }
@@ -167,12 +153,6 @@ package com.finegamedesign.templeofgold
         private function win():void
         {
             reset();
-            level++;
-            if (maxLevel < level) {
-                // level = 0;
-            }
-            else {
-            }
             feedback.gotoAndPlay("correct");
             correct.play();
             FlxKongregate.api.stats.submit("Score", Model.score);
@@ -199,7 +179,6 @@ package com.finegamedesign.templeofgold
 
         public function next():void
         {
-            // feedback.gotoAndPlay("none");
             mouseChildren = true;
             restart();
         }
