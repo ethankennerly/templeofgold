@@ -9,33 +9,37 @@ package com.finegamedesign.templeofgold
         internal static var levelScores:Array = [];
         internal static var score:int = 0;
         internal static var seconds:int = 60;
+        internal static var locks:Array = "abcd".split("");
+        internal static var keys:Array = "ABCD".split("");
         internal static var items:Object = {
             "@":	"Player",
             " ":    "Wall",
-            // A-Z	key
-            // a-z	corresponding lock
             ".":	"Floor",
             "$":	"Gold",
             "%":	"Stairs"
+            // A-Z	key
+            // a-z	corresponding lock
         };
-        /*
-            @	player
-            " "	(space) wall
-            A-Z	key
-            a-z	corresponding lock
-            .	Floor
-            $	gold
-            %	stairs down
-         */
+
         [Embed(source="levels.txt", mimeType="application/octet-stream")]
         private static var levelDiagramsClass:Class
         private static var levelDiagrams:Array = paragraphs(String(new levelDiagramsClass()));
+        internal static function get levelCount():int
+        {
+            return levelDiagrams.length;
+        }
 
         private static function parse(map:String):Array
         {
              var rows:Array = map.split("\n");
-             for (var r:int = 0; r < rows.length; r++) {
-                 rows[r] = rows[r].split("");
+             for (var r:int = rows.length - 1; 0 <= r; r--) {
+                 if (rows[r] == "") {
+                     rows.splice(r, 1);
+                 }
+                 else {
+                     rows[r] = rows[r].replace("\n", "");
+                     rows[r] = rows[r].split("");
+                 }
              }
              return rows;
         }
@@ -55,6 +59,8 @@ package com.finegamedesign.templeofgold
             }
         }
 
+        internal var carryingIndex:int;
+        internal var droppingIndex:int;
         internal var fuel:int;
         internal var highScore:int;
         internal var level:int;
@@ -82,7 +88,9 @@ package com.finegamedesign.templeofgold
             levelScore = 0;
             point = 0;
             moved = false;
-            fuel = 200;
+            fuel = 2000;
+            carryingIndex = -1;
+            droppingIndex = -1;
             map = parse(levelDiagrams[level - 1]);
             for (var r:int = 0; r < map.length; r++) {
                 for (var c:int = 0; c < map[r].length; c++) {
@@ -120,18 +128,17 @@ package com.finegamedesign.templeofgold
             else if ("DOWN" == direction) {
                 nextRow++;
             }
-            if (nextRow < 0 || map.length <= nextRow
-             || nextColumn < 0 || map[nextRow].length <= nextColumn) {
+            if (blocked(nextRow, nextColumn)) {
                 return false;
             }
             var key:String = map[nextRow][nextColumn];
-            if ("Wall" == items[key]) {
-                return false;
-            }
             playerRow = nextRow;
             playerColumn = nextColumn;
             moved = true;
             fuel -= 10;
+            var keyIndex:int = keys.indexOf(key);
+            var lockIndex:int = locks.indexOf(key);
+            droppingIndex = -1;
             if ("Stairs" == items[key]) {
                 point = secondsRemaining + fuel;
                 levelScore += point;
@@ -141,6 +148,41 @@ package com.finegamedesign.templeofgold
                 point = 100;
                 levelScore += point;
                 return true;
+            }
+            else if (0 <= keyIndex) {
+                if (0 <= carryingIndex) {
+                    droppingIndex = carryingIndex;
+                    map[playerRow][playerColumn] =
+                        keys[carryingIndex];
+                }
+                carryingIndex = keyIndex;
+            }
+            else if (0 <= lockIndex) {
+                if (carryingIndex == lockIndex) {
+                    droppingIndex = carryingIndex;
+                    map[playerRow][playerColumn] = ".";
+                        
+                }
+                carryingIndex = -1;
+            }
+
+            return false;
+        }
+
+        private function blocked(nextRow:int, nextColumn:int):Boolean {
+            if (nextRow < 0 || map.length <= nextRow
+             || nextColumn < 0 || map[nextRow].length <= nextColumn) {
+                return true;
+            }
+            var key:String = map[nextRow][nextColumn];
+            if ("Wall" == items[key]) {
+                return true;
+            }
+            var lockIndex:int = locks.indexOf(key);
+            if (0 <= lockIndex) {
+                if (carryingIndex != lockIndex) {
+                    return true;
+                }
             }
             return false;
         }

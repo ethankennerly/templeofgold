@@ -19,13 +19,28 @@ package com.finegamedesign.templeofgold
             "Stairs":   Stairs
         }
 
+        private static var lockClasses:Array = [
+            Lock0,
+            Lock1,
+            Lock2,
+            Lock3
+        ];
+
+        private static var keyClasses:Array = [
+            Key0,
+            Key1,
+            Key2,
+            Key3
+        ];
+
         internal var main:Main;
         internal var model:Model;
         private var countdown:Countdown;
         private var garbage:Array;
         private var golds:Object;
-        private var player:DisplayObject;
+        private var player:DisplayObjectContainer;
         private var pointClip:PointClip;
+        private var keys:Array;
 
         public function View()
         {
@@ -44,14 +59,20 @@ package com.finegamedesign.templeofgold
         {
             garbage = [];
             golds = {};
+            keys = [];
+            // Model.shuffle(lockClasses);
+            // Model.shuffle(keyClasses);
+            var itemClass:Class;
             for (var r:int = 0; r < map.length; r++) {
                 for (var c:int = 0; c < map[r].length; c++) {
                     var key:String = map[r][c];
                     var name:String;
-                    var item:DisplayObject;
-                    if (key in Model.items) {
+                    var item:DisplayObjectContainer;
+                    var keyIndex:int = Model.keys.indexOf(key);
+                    var lockIndex:int = Model.locks.indexOf(key);
+                    if (key in Model.items || 0 <= keyIndex || 0 <= lockIndex) {
                         name = Model.items[key];
-                        var itemClass:Class = itemClasses[name];
+                        itemClass = itemClasses[name];
                     }
                     else {
                         throw new Error("Unknown key " + key);
@@ -59,19 +80,41 @@ package com.finegamedesign.templeofgold
                     if ("Floor" != name) {
                         item = place(new Floor, c, r, main.input.map);
                     }
-                    item = place(new itemClass, c, r, main.input.map);
                     if ("Player" == name) {
+                        item = new itemClass();
                         player = item;
                     }
                     else if ("Gold" == name) {
+                        item = new itemClass();
                         golds[model.at(c, r)] = item;
                     }
+                    else if ("Wall" == name) {
+                        item = new itemClass();
+                    }
+                    else if ("Floor" == name) {
+                        item = new itemClass();
+                    }
+                    else if ("Stairs" == name) {
+                        item = new itemClass();
+                    }
+                    else {
+                        if (0 <= keyIndex) {
+                            itemClass = keyClasses[keyIndex];
+                            item = new itemClass();
+                            keys[keyIndex] = item;
+                        }
+                        else if (0 <= lockIndex) {
+                            itemClass = lockClasses[lockIndex];
+                            item = new itemClass();
+                        }
+                    }
+                    item = place(item, c, r, main.input.map);
                 }
             }
             updatePosition();
         }
 
-        private function place(item:DisplayObject, c:int, r:int, map:DisplayObjectContainer):DisplayObject
+        private function place(item:DisplayObjectContainer, c:int, r:int, map:DisplayObjectContainer):DisplayObjectContainer
         {
             item.cacheAsBitmap = true;
             item.x = c * tile.width;
@@ -118,6 +161,7 @@ package com.finegamedesign.templeofgold
                 answer("DOWN");
             }
             updatePosition();
+            updateCarrying();
             var winning:int = model.update(countdown.remaining);
             return winning;
         }
@@ -133,6 +177,20 @@ package com.finegamedesign.templeofgold
             player.y = model.playerRow * tile.height;
             main.input.map.x = -player.x;
             main.input.map.y = -player.y;
+        }
+
+        private function updateCarrying():void
+        {
+            if (0 <= model.carryingIndex) {
+                keys[model.carryingIndex].x = 0;
+                keys[model.carryingIndex].y = 0;
+                player.addChild(keys[model.carryingIndex]);
+            }
+            if (0 <= model.droppingIndex) {
+                place(keys[model.droppingIndex], model.playerColumn, 
+                    model.playerRow, main.input.map);
+                model.droppingIndex = -1;
+            }
         }
 
         private function remove(garbage:Array):void

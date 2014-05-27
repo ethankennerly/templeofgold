@@ -23,7 +23,7 @@ package com.finegamedesign.templeofgold
             }
             var columnCount:int = 1;
             var columnWidth:int = 80;
-            for (var i:int = 0; i < LevelLoader.levels.length; i++) {
+            for (var i:int = 0; i < Model.levelCount; i++) {
                 var tile:LevelTile = new LevelTile();
                 tile.x = columnWidth * ((i % columnCount) - ((columnCount - 1) / 2));
                 tile.y = columnWidth * int(i / columnCount);

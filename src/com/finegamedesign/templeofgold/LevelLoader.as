@@ -8,9 +8,7 @@ package com.finegamedesign.templeofgold
         internal static var levels:Array = [
             LevelInput,
             LevelTime,
-            LevelIdentify,
-            LevelIgnoreColor,
-            LevelSwap
+            LevelIdentify
         ];
 
         internal static var onLoaded:Function;
@@ -19,7 +17,10 @@ package com.finegamedesign.templeofgold
 
         internal static function load(level:int):DisplayObjectContainer
         {
-            var levelClass:Class = levels[level - 1];
+            var levelClass:Class = Sprite;
+            if (level <= levels.length) {
+                var levelClass:Class = levels[level - 1];
+            }
             instance = new levelClass();
             return instance;
         }
