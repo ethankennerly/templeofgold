@@ -1,12 +1,7 @@
 TODO
-	Parse map into player, floor, walls, lock, key, gold, stairs.
-	Press arrow key to move.
-	Wall blocks movement.
-	Key opens corresponding lock.
-	Shuffle keys.
-	Gold.
-	Stairs score remaining time.
+	left/right path seeing which way has key to other door wrapping around.
 	5 maps.
+	Shuffle keys.
 	Balance lamp oil to moves.
 	Darkness occludes rest of the map.
 

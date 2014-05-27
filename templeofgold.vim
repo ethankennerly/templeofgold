@@ -15,8 +15,8 @@ onoremap  gggHG
 nnoremap  gggHG
 vnoremap  "+y
 noremap  
-vnoremap  :update
 nnoremap  :update
+vnoremap  :update
 onoremap  :update
 nmap  "+gP
 omap  "+gP
@@ -27,12 +27,13 @@ cnoremap   :simalt ~
 inoremap   :simalt ~
 map <silent> \t :call MakeGreen()
 nmap gx <Plug>NetrwBrowseX
+nmap <S-Insert> "+gP
+nnoremap <C-Tab> w
+nnoremap <C-F4> c
 nnoremap <silent> <Plug>NetrwBrowseX :call netrw#NetrwBrowseX(expand("<cWORD>"),0)
 onoremap <C-F4> c
-nnoremap <C-F4> c
 vnoremap <C-F4> c
 onoremap <C-Tab> w
-nnoremap <C-Tab> w
 vnoremap <C-Tab> w
 vmap <S-Insert> 
 vnoremap <BS> d
@@ -40,7 +41,6 @@ map <F5> :r !date /T:r !time /To
 vmap <C-Del> "*d
 vnoremap <S-Del> "+x
 vnoremap <C-Insert> "+y
-nmap <S-Insert> "+gP
 omap <S-Insert> "+gP
 cnoremap  gggHG
 inoremap  gggHG
@@ -72,15 +72,16 @@ if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
 set shortmess=aoO
+badd +5 \archive\flash\templeofgold\templeofgold.vim
 badd +58 \archive\flash\templeofgold\bin\index.html
-badd +0 \archive\flash\templeofgold\notes.txt
+badd +1 \archive\flash\templeofgold\notes.txt
 badd +181 Main.as
-badd +14 Model.as
+badd +1 Model.as
 badd +13 levels.txt
 badd +41 ..\..\..\..\..\one\src\com\finegamedesign\one\Model.as
 badd +63 View.as
 badd +41 LevelLoader.as
-badd +0 LevelSelect.as
+badd +1 LevelSelect.as
 args \archive\flash\templeofgold\bin\index.html
 edit \archive\flash\templeofgold\notes.txt
 set splitbelow splitright
@@ -92,8 +93,8 @@ set nosplitbelow
 set nosplitright
 wincmd t
 set winheight=1 winwidth=1
-exe 'vert 1resize ' . ((&columns * 67 + 67) / 134)
-exe 'vert 2resize ' . ((&columns * 65 + 67) / 134)
+exe 'vert 1resize ' . ((&columns * 67 + 66) / 133)
+exe 'vert 2resize ' . ((&columns * 65 + 66) / 133)
 argglobal
 setlocal keymap=
 setlocal noarabic
@@ -196,12 +197,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 28 - ((13 * winheight(0) + 15) / 31)
+let s:l = 28 - ((4 * winheight(0) + 15) / 31)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
 28
-normal! 0162l
+normal! 0
 wincmd w
 argglobal
 edit \archive\flash\templeofgold\bin\index.html
@@ -306,15 +307,16 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 23 - ((0 * winheight(0) + 15) / 31)
+let s:l = 61 - ((20 * winheight(0) + 15) / 31)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-23
-normal! 01l
+61
+normal! 07l
 wincmd w
-exe 'vert 1resize ' . ((&columns * 67 + 67) / 134)
-exe 'vert 2resize ' . ((&columns * 65 + 67) / 134)
+2wincmd w
+exe 'vert 1resize ' . ((&columns * 67 + 66) / 133)
+exe 'vert 2resize ' . ((&columns * 65 + 66) / 133)
 tabedit Main.as
 set splitbelow splitright
 set nosplitbelow
@@ -423,12 +425,13 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 47 - ((25 * winheight(0) + 16) / 32)
+let s:l = 146 - ((0 * winheight(0) + 16) / 32)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-47
-normal! 08l
+146
+normal! 0
+2wincmd w
 tabedit Model.as
 set splitbelow splitright
 wincmd _ | wincmd |
@@ -444,10 +447,10 @@ set nosplitright
 wincmd t
 set winheight=1 winwidth=1
 exe '1resize ' . ((&lines * 15 + 16) / 33)
-exe 'vert 1resize ' . ((&columns * 66 + 67) / 134)
+exe 'vert 1resize ' . ((&columns * 66 + 66) / 133)
 exe '2resize ' . ((&lines * 15 + 16) / 33)
-exe 'vert 2resize ' . ((&columns * 66 + 67) / 134)
-exe 'vert 3resize ' . ((&columns * 66 + 67) / 134)
+exe 'vert 2resize ' . ((&columns * 66 + 66) / 133)
+exe 'vert 3resize ' . ((&columns * 66 + 66) / 133)
 argglobal
 setlocal keymap=
 setlocal noarabic
@@ -550,12 +553,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 27 - ((2 * winheight(0) + 7) / 15)
+let s:l = 158 - ((9 * winheight(0) + 7) / 15)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-27
-normal! 046l
+158
+normal! 026l
 wincmd w
 argglobal
 edit Model.as
@@ -660,12 +663,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 163 - ((8 * winheight(0) + 7) / 15)
+let s:l = 153 - ((10 * winheight(0) + 7) / 15)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-163
-normal! 054l
+153
+normal! 039l
 wincmd w
 argglobal
 edit View.as
@@ -777,11 +780,12 @@ normal! zt
 192
 normal! 040l
 wincmd w
+2wincmd w
 exe '1resize ' . ((&lines * 15 + 16) / 33)
-exe 'vert 1resize ' . ((&columns * 66 + 67) / 134)
+exe 'vert 1resize ' . ((&columns * 66 + 66) / 133)
 exe '2resize ' . ((&lines * 15 + 16) / 33)
-exe 'vert 2resize ' . ((&columns * 66 + 67) / 134)
-exe 'vert 3resize ' . ((&columns * 66 + 67) / 134)
+exe 'vert 2resize ' . ((&columns * 66 + 66) / 133)
+exe 'vert 3resize ' . ((&columns * 66 + 66) / 133)
 tabedit LevelSelect.as
 set splitbelow splitright
 wincmd _ | wincmd |
@@ -797,10 +801,10 @@ set nosplitright
 wincmd t
 set winheight=1 winwidth=1
 exe '1resize ' . ((&lines * 15 + 16) / 33)
-exe 'vert 1resize ' . ((&columns * 66 + 67) / 134)
+exe 'vert 1resize ' . ((&columns * 66 + 66) / 133)
 exe '2resize ' . ((&lines * 15 + 16) / 33)
-exe 'vert 2resize ' . ((&columns * 66 + 67) / 134)
-exe 'vert 3resize ' . ((&columns * 66 + 67) / 134)
+exe 'vert 2resize ' . ((&columns * 66 + 66) / 133)
+exe 'vert 3resize ' . ((&columns * 66 + 66) / 133)
 argglobal
 setlocal keymap=
 setlocal noarabic
@@ -1013,12 +1017,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 43 - ((14 * winheight(0) + 7) / 15)
+let s:l = 12 - ((11 * winheight(0) + 7) / 15)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-43
-normal! 0
+12
+normal! 020l
 wincmd w
 argglobal
 edit levels.txt
@@ -1123,19 +1127,20 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 6 - ((5 * winheight(0) + 15) / 31)
+let s:l = 23 - ((13 * winheight(0) + 15) / 31)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-6
-normal! 0
+23
+normal! 08l
 wincmd w
+2wincmd w
 exe '1resize ' . ((&lines * 15 + 16) / 33)
-exe 'vert 1resize ' . ((&columns * 66 + 67) / 134)
+exe 'vert 1resize ' . ((&columns * 66 + 66) / 133)
 exe '2resize ' . ((&lines * 15 + 16) / 33)
-exe 'vert 2resize ' . ((&columns * 66 + 67) / 134)
-exe 'vert 3resize ' . ((&columns * 66 + 67) / 134)
-tabnext 2
+exe 'vert 2resize ' . ((&columns * 66 + 66) / 133)
+exe 'vert 3resize ' . ((&columns * 66 + 66) / 133)
+tabnext 1
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf
 endif

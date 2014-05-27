@@ -29,19 +29,28 @@ package com.finegamedesign.templeofgold
             return levelDiagrams.length;
         }
 
-        private static function parse(map:String):Array
+        /**
+         * Last row has fuel.
+         */
+        private static function parse(map:String):Object
         {
              var rows:Array = map.split("\n");
+             var fuel:int = 200;
              for (var r:int = rows.length - 1; 0 <= r; r--) {
+                 var tryFuel:int = parseInt(rows[r]);
                  if (rows[r] == "") {
                      rows.splice(r, 1);
+                 }
+                 else if (1 <= tryFuel) {
+                     rows.splice(r, 1);
+                     fuel = tryFuel;
                  }
                  else {
                      rows[r] = rows[r].replace("\n", "");
                      rows[r] = rows[r].split("");
                  }
              }
-             return rows;
+             return {map: rows, fuel: fuel};
         }
 
         internal static function paragraphs(levelDiagramsText:String):Array
@@ -88,10 +97,11 @@ package com.finegamedesign.templeofgold
             levelScore = 0;
             point = 0;
             moved = false;
-            fuel = 2000;
             carryingIndex = -1;
             droppingIndex = -1;
-            map = parse(levelDiagrams[level - 1]);
+            var params:Object = parse(levelDiagrams[level - 1]);
+            map = params.map;
+            fuel = params.fuel;
             for (var r:int = 0; r < map.length; r++) {
                 for (var c:int = 0; c < map[r].length; c++) {
                     if ("Player" == items[map[r][c]]) {
@@ -135,12 +145,12 @@ package com.finegamedesign.templeofgold
             playerRow = nextRow;
             playerColumn = nextColumn;
             moved = true;
-            fuel -= 10;
+            fuel--;
             var keyIndex:int = keys.indexOf(key);
             var lockIndex:int = locks.indexOf(key);
             droppingIndex = -1;
             if ("Stairs" == items[key]) {
-                point = secondsRemaining + fuel;
+                point = secondsRemaining;
                 levelScore += point;
             }
             else if ("Gold" == items[key]) {
@@ -203,11 +213,11 @@ package com.finegamedesign.templeofgold
         private function win():int
         {
             var winning:int = 0;
-            if (secondsRemaining <= 0 || fuel <= 0) {
-                winning = -1;
-            }
-            else if ("Stairs" == on()) {
+            if ("Stairs" == on()) {
                 winning = 1;
+            }
+            else if (secondsRemaining <= 0 || fuel <= 0) {
+                winning = -1;
             }
             updateScore();
             return winning;
